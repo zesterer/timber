@@ -9,14 +9,21 @@ include several niche features seen in neither. I don't really recommend you use
 of a personal project.
 
 ### Compiling & Running
+#### (Easy as chips)
 
-Easy as chips.
+Clone the repository:
 
-Building the thing:
+`git clone git://www.github.com/zesterer/timber/`
+
+Navigate to Timbers directory:
+
+`cd timber`
+
+Build Timber:
 
 `make build`
 
-Running the thing:
+Run Timber:
 
 `make run`
 
