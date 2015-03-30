@@ -29,14 +29,14 @@ namespace Timber
 		public Wnck.Screen wnck_screen;
 
 		//Shadows and spacing
-		public int shadow_size = 8;
+		public int shadow_size = 4;
 		public int side_margin = 16;
 		public int vertical_margin = 4;
-		public int content_spacing = 24;
+		public int content_spacing = 32;
 		
 		//Opacities
 		public bool _maximised_mode = false;
-		public double normal_opacity = 0.25;
+		public double normal_opacity = 0.4;
 		public double maximised_opacity = 1.0;
 		public double* target_opacity; //Pointer to a target
 		public double current_opacity = 0.2;

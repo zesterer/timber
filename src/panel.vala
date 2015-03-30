@@ -2,7 +2,12 @@ namespace Timber
 {
 	public class Panel : BasePanel
 	{
+		public PanelButton menu_button;
 		public Gtk.Label clock;
+		
+		public Gtk.Box status_box;
+		public PanelButton brightness_button;
+		public PanelButton sound_button;
 		
 		public Panel()
 		{	
@@ -12,7 +17,20 @@ namespace Timber
 			//Reset the time frequently
 			this.onTickSignal.connect(this.setTime);
 			
-			this.contents.add(new Gtk.Image.from_icon_name("open-menu-symbolic", Gtk.IconSize.SMALL_TOOLBAR));
+			//The menu button on the very left
+			this.menu_button = new PanelButton("Menu", "open-menu-symbolic");
+			this.contents.add(this.menu_button);
+			
+			//Create a box to hold widgets on the right
+			this.status_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 24);
+			this.status_box.set_halign(Gtk.Align.END);
+			this.contents.pack_end(this.status_box);
+			
+			this.brightness_button = new PanelButton(null, "display-brightness-symbolic");
+			this.status_box.add(this.brightness_button);
+			
+			this.sound_button = new PanelButton(null, "audio-volume-medium-symbolic");
+			this.status_box.add(this.sound_button);
 		}
 		
 		public void setTime() //TODO - replace all of this with a plugin system
