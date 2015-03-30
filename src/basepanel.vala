@@ -137,8 +137,8 @@ namespace Timber
 	
 		public override bool draw(Cairo.Context context)
 		{
-			Gtk.Allocation size;
-			this.get_allocation (out size);
+			Gtk.Allocation alloc;
+			this.get_allocation (out alloc);
 
 			//It's important to use window_context to avoid weird transparency issues!
 			var window_context = Gdk.cairo_create(this.get_window());
@@ -150,9 +150,9 @@ namespace Timber
 			this.panel_tint = {col.red, col.green, col.blue};
 		
 			//The gradient panel background
-			Cairo.Pattern pat = new Cairo.Pattern.linear (0, 0, 0, size.height);
+			Cairo.Pattern pat = new Cairo.Pattern.linear (0, 0, 0, alloc.height);
 			pat.add_color_stop_rgba (0.0, this.panel_tint.red, this.panel_tint.green, this.panel_tint.blue, this.current_opacity);
-			pat.add_color_stop_rgba (1.0 - ((double)this.shadow_size / size.height), this.panel_tint.red, this.panel_tint.green, this.panel_tint.blue, this.current_opacity);
+			pat.add_color_stop_rgba (1.0 - ((double)this.shadow_size / alloc.height), this.panel_tint.red, this.panel_tint.green, this.panel_tint.blue, this.current_opacity);
 			pat.add_color_stop_rgba (1.0, 0.0, 0.0, 0.0, 0.0);
 			window_context.set_source(pat);
 			window_context.fill();

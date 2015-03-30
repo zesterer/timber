@@ -2,6 +2,8 @@ namespace Timber
 {
 	public class PanelButton : Gtk.EventBox
 	{
+		weak BasePanel panel;
+		
 		public Gtk.Box contents;
 		public Gtk.Image image;
 		public Gtk.Label label;
@@ -9,8 +11,11 @@ namespace Timber
 		//A fake click event
 		public signal void clicked();
 		
-		public PanelButton(string? label_text = null, string? icon_name = null)
+		public PanelButton(BasePanel panel, string? label_text = null, string? icon_name = null)
 		{
+			this.panel = panel;
+			this.panel.onTickSignal.connect(this.onTickSignal);
+			
 			//Align everything neatly
 			this.set_valign(Gtk.Align.CENTER);
 			this.button_press_event.connect(this.onButtonPressEvent);
@@ -35,6 +40,8 @@ namespace Timber
 				this.label.set_valign(Gtk.Align.CENTER);
 				this.contents.add(this.label);
 			}
+			
+			this.update();
 		}
 		
 		public bool onButtonPressEvent(Gdk.EventButton event)
@@ -45,6 +52,41 @@ namespace Timber
 			this.clicked();
 			
 			return false;
+		}
+		
+		public void update()
+		{
+			bool dark;
+			weak Gdk.RGBA colour = this.panel.panel_tint;
+			Gdk.RGBA new_colour;
+			
+			//Some themes don't make this default, so let's force it.
+			if (colour.red + colour.green + colour.blue > 1.5) //If the colour is closer to white...
+			{
+				dark = true;
+				new_colour = {0.2, 0.2, 0.2, 1.0};
+			}
+			else //The colour is closer to black
+			{
+				dark = false;
+				new_colour = {1.0, 1.0, 1.0, 1.0};
+			}
+			
+			if (dark) //Dark
+			{
+				this.image.override_color(Gtk.StateFlags.NORMAL, new_colour);
+				this.label.override_color(Gtk.StateFlags.NORMAL, new_colour);
+			}
+			else //Light
+			{
+				this.image.override_color(Gtk.StateFlags.NORMAL, new_colour);
+				this.label.override_color(Gtk.StateFlags.NORMAL, new_colour);
+			}
+		}
+		
+		public void onTickSignal()
+		{
+			this.update();
 		}
 	}
 }
