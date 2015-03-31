@@ -27,6 +27,8 @@ namespace Timber
 		public double tail_position;
 		public int click = 0; //The number of times clicked since last revealed (avoid insta-close)
 		
+		public Gtk.Box style_box;
+		
 		public Gtk.Box contents;
 		
 		public Gtk.Widget? target_widget = null;
@@ -57,6 +59,9 @@ namespace Timber
 			//Transparency
 			this.set_visual(this.get_screen().get_rgba_visual());
 			this.set_type_hint(Gdk.WindowTypeHint.MENU);
+			
+			//Styling
+			this.style_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 			
 			//And the widgets that can go inside us
 			this.contents = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
@@ -144,38 +149,33 @@ namespace Timber
 			Gtk.Allocation size;
 			this.get_allocation (out size);
 
-			var window_context = Gdk.cairo_create(this.get_window());
-		
-			window_context.set_source_rgba (0.0, 0.0, 0.0, 0.0);
-			window_context.set_operator(Cairo.Operator.SOURCE);
-			window_context.paint();
+			context.set_source_rgba (0.0, 0.0, 0.0, 0.0);
+			context.set_operator(Cairo.Operator.SOURCE);
+			context.paint();
 			
-			this.drawShape(window_context);
-			window_context.clip();
+			this.drawShape(context);
+			context.clip();
 			//Use a box to get the foreground colour
-			Gtk.Box box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-			var background = box.get_style_context().get_color(Gtk.StateFlags.NORMAL);
-			window_context.set_source_rgba(background.red - 0.03, background.green - 0.03, background.blue - 0.03, 1.0);
-			window_context.paint();
+			var background = this.style_box.get_style_context().get_color(Gtk.StateFlags.NORMAL);
+			context.set_source_rgba(background.red - 0.03, background.green - 0.03, background.blue - 0.03, 1.0);
+			context.paint();
 			
-			window_context.reset_clip();
+			context.reset_clip();
 			
-			this.drawShape(window_context);
+			this.drawShape(context);
 			
-			window_context.set_line_width(0.5); //Forced. Probably should change this, but not now.
+			context.set_line_width(0.5); //Forced. Probably should change this, but not now.
 			var border = this.get_style_context().get_border_color(Gtk.StateFlags.ACTIVE);
 			//Bias the colour a little closer to grey. May be a problem on some themes, but fixes many more so meh.
-			window_context.set_source_rgba((border.red - 0.5) / 1.4 + 0.5, (border.green - 0.5) / 1.4 + 0.5, (border.blue - 0.5) / 1.4 + 0.5, 1.0);
-			window_context.stroke ();
+			context.set_source_rgba((border.red - 0.5) / 1.4 + 0.5, (border.green - 0.5) / 1.4 + 0.5, (border.blue - 0.5) / 1.4 + 0.5, 1.0);
+			context.stroke ();
 			
-			window_context.fill();
+			context.fill();
 		
 			var child = this.get_child();
 		
 			if (child != null)
 				this.propagate_draw(child, context);
-			
-			this.show_all();
 		
 			return false;
 		}

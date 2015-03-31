@@ -125,7 +125,6 @@ namespace Timber
 			set
 			{
 				this._maximised_mode = value;
-				this.queue_draw();
 				
 				//We're maximised, so change the opacity
 				if (this._maximised_mode)
@@ -182,8 +181,6 @@ namespace Timber
 				}
 			}
 			this.maximised_mode = maximised;
-			
-			this.queue_draw();
 		}
 		
 		public void doResize()
@@ -206,9 +203,11 @@ namespace Timber
 		
 		public bool onTick() //Called on timer
 		{
+			bool redraw = false; //Should we redraw this method?
+			
 			//TODO - Sorry. There's gotta be a less performance-intensive way than this...
 			//Update regularly-ish
-			if (this.tick % 15 == 0)
+			if (this.tick % 20 == 0) //Every 20th of a second
 				this.onViewportsChanged();
 			
 			//Make it slide down from the top
@@ -216,18 +215,23 @@ namespace Timber
 			{
 				this.doResize();
 				this.offset /= 1.0 + this.animation_speed;
+				redraw = true;
 			}
 			
 			//If the current opacity needs adjusting towards the target opacity
 			if (Math.fabs(this.current_opacity - *this.target_opacity) > 0.001)
 			{
 				this.current_opacity += Math.fmin(this.animation_speed / 5, Math.fmax(-this.animation_speed / 5, *this.target_opacity - this.current_opacity));
-				this.queue_draw();
+				redraw = true;
 			}
 			
 			this.tick ++;
 			
 			this.onTickSignal();
+			
+			//Redraw if necessary (every second)
+			if (redraw || this.tick % 100 == 0)
+				this.queue_draw();
 			
 			//Restart the timer
 			return true;

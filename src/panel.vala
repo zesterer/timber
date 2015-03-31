@@ -54,7 +54,6 @@ namespace Timber
 			this.status_box.add(this.sound_button);
 			
 			this.test = new TestPopover(this.sound_button);
-			this.test.contents.set_size_request(100, 100);
 		}
 		
 		public void setTime() //TODO - replace all of this with a plugin system

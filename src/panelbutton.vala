@@ -75,7 +75,7 @@ namespace Timber
 		public void update()
 		{
 			bool dark;
-			weak Gdk.RGBA colour = this.panel.panel_tint;
+			Gdk.RGBA colour = this.panel.panel_tint;
 			Gdk.RGBA new_colour;
 			
 			//Some themes don't make this default, so let's force it.
