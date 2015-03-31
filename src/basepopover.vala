@@ -148,29 +148,31 @@ namespace Timber
 		{
 			Gtk.Allocation size;
 			this.get_allocation (out size);
-
-			context.set_source_rgba (0.0, 0.0, 0.0, 0.0);
-			context.set_operator(Cairo.Operator.SOURCE);
-			context.paint();
 			
-			this.drawShape(context);
-			context.clip();
+			Cairo.Context window_context = Gdk.cairo_create(this.get_window());
+
+			window_context.set_source_rgba (0.0, 0.0, 0.0, 0.0);
+			window_context.set_operator(Cairo.Operator.SOURCE);
+			window_context.paint();
+			
+			this.drawShape(window_context);
+			window_context.clip();
 			//Use a box to get the foreground colour
 			var background = this.style_box.get_style_context().get_color(Gtk.StateFlags.NORMAL);
-			context.set_source_rgba(background.red - 0.03, background.green - 0.03, background.blue - 0.03, 1.0);
-			context.paint();
+			window_context.set_source_rgba(background.red - 0.03, background.green - 0.03, background.blue - 0.03, 1.0);
+			window_context.paint();
 			
-			context.reset_clip();
+			window_context.reset_clip();
 			
-			this.drawShape(context);
+			this.drawShape(window_context);
 			
-			context.set_line_width(0.5); //Forced. Probably should change this, but not now.
+			window_context.set_line_width(0.5); //Forced. Probably should change this, but not now.
 			var border = this.get_style_context().get_border_color(Gtk.StateFlags.ACTIVE);
 			//Bias the colour a little closer to grey. May be a problem on some themes, but fixes many more so meh.
-			context.set_source_rgba((border.red - 0.5) / 1.4 + 0.5, (border.green - 0.5) / 1.4 + 0.5, (border.blue - 0.5) / 1.4 + 0.5, 1.0);
-			context.stroke ();
+			window_context.set_source_rgba((border.red - 0.5) / 1.4 + 0.5, (border.green - 0.5) / 1.4 + 0.5, (border.blue - 0.5) / 1.4 + 0.5, 1.0);
+			window_context.stroke ();
 			
-			context.fill();
+			window_context.fill();
 		
 			var child = this.get_child();
 		
@@ -186,6 +188,7 @@ namespace Timber
 			this.adjust();
 			this.grab_focus();
 			this.present();
+			this.show_all();
 		}
 		
 		public void toggleReveal()

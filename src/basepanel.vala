@@ -50,6 +50,9 @@ namespace Timber
 		//The panel colour
 		public Gdk.RGBA panel_tint;
 		
+		//The style
+		public Gtk.HeaderBar style_headerbar;
+		
 		//The position & size
 		private int x;
 		private int y;
@@ -81,6 +84,9 @@ namespace Timber
 			//Set the opacity & panel tint to default
 			this.target_opacity = &this.normal_opacity;
 			this.panel_tint = {0.1, 0.1, 0.1, 1.0};
+			
+			//Styling headerbar, used for colours
+			this.style_headerbar = new Gtk.HeaderBar();
 			
 			//Set up Wnck as needed
 			Wnck.set_client_type(Wnck.ClientType.PAGER);
@@ -144,8 +150,7 @@ namespace Timber
 			window_context.set_operator(Cairo.Operator.SOURCE);
 			
 			//Grab a headerbar's colour to use
-			Gtk.HeaderBar header = new Gtk.HeaderBar();
-			Gdk.RGBA col = header.get_style_context().get_background_color(Gtk.StateFlags.ACTIVE);
+			Gdk.RGBA col = this.style_headerbar.get_style_context().get_background_color(Gtk.StateFlags.ACTIVE);
 			this.panel_tint = {col.red, col.green, col.blue};
 		
 			//The gradient panel background
