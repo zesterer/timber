@@ -25,6 +25,9 @@ src/application.vala \
 src/basepanel.vala \
 src/panel.vala \
 src/panelbutton.vala \
+src/basepopover.vala \
+src/testpopover.vala \
+src/notificationarea.vala \
 
 VALA_FLAGS=-X -lm -X "-D WNCK_I_KNOW_THIS_IS_UNSTABLE"
 

@@ -1,19 +1,19 @@
 /* Copyright (C) 2015 Barry Smith <barry.of.smith@gmail.com>
 *
-* This file is part of Vulcan.
+* This file is part of Timber.
 *
-* Vulcan is free software: you can redistribute it
+* Timber is free software: you can redistribute it
 * and/or modify it under the terms of the GNU General Public License as
 * published by the Free Software Foundation, either version 2 of the
 * License, or (at your option) any later version.
 *
-* Vulcan is distributed in the hope that it will be
+* Timber is distributed in the hope that it will be
 * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
 * Public License for more details.
 *
 * You should have received a copy of the GNU General Public License along
-* with Vulcan. If not, see http://www.gnu.org/licenses/.
+* with Timber. If not, see http://www.gnu.org/licenses/.
 */
 
 namespace Timber
@@ -36,7 +36,7 @@ namespace Timber
 		
 		//Opacities
 		public bool _maximised_mode = false;
-		public double normal_opacity = 0.4;
+		public double normal_opacity = 0.0;
 		public double maximised_opacity = 1.0;
 		public double* target_opacity; //Pointer to a target
 		public double current_opacity = 0.2;
@@ -54,7 +54,7 @@ namespace Timber
 		private int x;
 		private int y;
 		private int width;
-		public int height = 30;
+		public int height = 34;
 		private double offset; //Used for hiding
 		
 		//The panel tick
@@ -146,7 +146,7 @@ namespace Timber
 			
 			//Grab a headerbar's colour to use
 			Gtk.HeaderBar header = new Gtk.HeaderBar();
-			Gdk.RGBA col = header.get_style_context().get_background_color(Gtk.StateFlags.NORMAL);
+			Gdk.RGBA col = header.get_style_context().get_background_color(Gtk.StateFlags.ACTIVE);
 			this.panel_tint = {col.red, col.green, col.blue};
 		
 			//The gradient panel background
@@ -221,7 +221,7 @@ namespace Timber
 			//If the current opacity needs adjusting towards the target opacity
 			if (Math.fabs(this.current_opacity - *this.target_opacity) > 0.001)
 			{
-				this.current_opacity += Math.fmin(0.01, Math.fmax(-0.01, *this.target_opacity - this.current_opacity));
+				this.current_opacity += Math.fmin(this.animation_speed / 5, Math.fmax(-this.animation_speed / 5, *this.target_opacity - this.current_opacity));
 				this.queue_draw();
 			}
 			

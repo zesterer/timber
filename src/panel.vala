@@ -1,3 +1,21 @@
+/* Copyright (C) 2015 Barry Smith <barry.of.smith@gmail.com>
+*
+* This file is part of Timber.
+*
+* Timber is free software: you can redistribute it
+* and/or modify it under the terms of the GNU General Public License as
+* published by the Free Software Foundation, either version 2 of the
+* License, or (at your option) any later version.
+*
+* Timber is distributed in the hope that it will be
+* useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+* Public License for more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with Timber. If not, see http://www.gnu.org/licenses/.
+*/
+
 namespace Timber
 {
 	public class Panel : BasePanel
@@ -9,6 +27,8 @@ namespace Timber
 		public PanelButton brightness_button;
 		public PanelButton sound_button;
 		
+		public TestPopover test;
+		
 		public Panel()
 		{	
 			//TODO - replace this with a proper plugin
@@ -18,7 +38,7 @@ namespace Timber
 			this.onTickSignal.connect(this.setTime);
 			
 			//The menu button on the very left
-			this.menu_button = new PanelButton(this, "Menu", "open-menu-symbolic");
+			this.menu_button = new PanelButton(this, "Applications", "open-menu-symbolic");
 			this.contents.add(this.menu_button);
 			
 			//Create a box to hold widgets on the right
@@ -30,7 +50,11 @@ namespace Timber
 			this.status_box.add(this.brightness_button);
 			
 			this.sound_button = new PanelButton(this, null, "audio-volume-medium-symbolic");
+			this.sound_button.clicked.connect(() => {this.test.toggleReveal();});
 			this.status_box.add(this.sound_button);
+			
+			this.test = new TestPopover(this.sound_button);
+			this.test.contents.set_size_request(100, 100);
 		}
 		
 		public void setTime() //TODO - replace all of this with a plugin system
