@@ -118,7 +118,7 @@ namespace Timber
 			this.offset = -(double)(this.height + this.shadow_size);
 			
 			//Start the panel timer going
-			Timeout.add(10, this.onTick);
+			Timeout.add(20, this.onTick);
 			
 			//Initialise everything with a resize and a checking of window viewports
 			this.onViewportsChanged();
@@ -145,9 +145,9 @@ namespace Timber
 			Gtk.Allocation alloc;
 			this.get_allocation (out alloc);
 
-			//It's important to use window_context to avoid weird transparency issues!
-			var window_context = Gdk.cairo_create(this.get_window());
-			window_context.set_operator(Cairo.Operator.SOURCE);
+			context.set_operator(Cairo.Operator.SOURCE);
+			context.set_source_rgba(0.0, 0.0, 0.0, 0.0);
+			context.paint();
 			
 			//Grab a headerbar's colour to use
 			Gdk.RGBA col = this.style_headerbar.get_style_context().get_background_color(Gtk.StateFlags.ACTIVE);
@@ -158,14 +158,15 @@ namespace Timber
 			pat.add_color_stop_rgba (0.0, this.panel_tint.red, this.panel_tint.green, this.panel_tint.blue, this.current_opacity);
 			pat.add_color_stop_rgba (1.0 - ((double)this.shadow_size / alloc.height), this.panel_tint.red, this.panel_tint.green, this.panel_tint.blue, this.current_opacity);
 			pat.add_color_stop_rgba (1.0, 0.0, 0.0, 0.0, 0.0);
-			window_context.set_source(pat);
-			window_context.fill();
-			window_context.paint();
+			context.set_source(pat);
+			context.set_operator(Cairo.Operator.SOURCE);
+			context.paint();
+			
+			context.set_operator(Cairo.Operator.OVER);
 			
 			//Redraw the child
-			weak Gtk.Widget child = this.get_child();
-			if (child != null)
-				this.propagate_draw(child, context);
+			if (this.get_child() != null)
+				this.propagate_draw(this.get_child(), context);
 		
 			return false;
 		}
@@ -202,8 +203,6 @@ namespace Timber
 			this.set_size_request(this.width, this.height + this.shadow_size);
 			
 			this.structs();
-			
-			this.queue_draw();
 		}
 		
 		public bool onTick() //Called on timer
@@ -212,11 +211,11 @@ namespace Timber
 			
 			//TODO - Sorry. There's gotta be a less performance-intensive way than this...
 			//Update regularly-ish
-			if (this.tick % 20 == 0) //Every 20th of a second
+			if (this.tick % 10 == 0) //Every 5th of a second
 				this.onViewportsChanged();
 			
 			//Make it slide down from the top
-			if (this.offset < 0.5)
+			if (Math.fabs(this.offset) > 0.5)
 			{
 				this.doResize();
 				this.offset /= 1.0 + this.animation_speed;
@@ -235,7 +234,7 @@ namespace Timber
 			this.onTickSignal();
 			
 			//Redraw if necessary (every second)
-			if (redraw || this.tick % 100 == 0)
+			if (redraw || this.tick % 50 == 0)
 				this.queue_draw();
 			
 			//Restart the timer

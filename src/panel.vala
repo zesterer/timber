@@ -29,6 +29,8 @@ namespace Timber
 		
 		public TestPopover test;
 		
+		public string[] current_time;
+		
 		public Panel()
 		{	
 			//TODO - replace this with a proper plugin
@@ -36,6 +38,11 @@ namespace Timber
 			this.contents.set_center_widget(this.clock);
 			//Reset the time frequently
 			this.onTickSignal.connect(this.setTime);
+			
+			//The current clock time
+			this.current_time = {"0", "0", "0"};
+			//And do it now
+			this.setTime();
 			
 			//The menu button on the very left
 			this.menu_button = new PanelButton(this, "Applications", "open-menu-symbolic");
@@ -58,18 +65,25 @@ namespace Timber
 		
 		public void setTime() //TODO - replace all of this with a plugin system
 		{
-			string hour = new DateTime.now_local().get_hour().to_string();
-			string minute = new DateTime.now_local().get_minute().to_string();
-			string second = new DateTime.now_local().get_second().to_string();
+			if (this.tick % 25 == 0) //Every half-second - don't try to do it TOO often
+			{
+				string hour = new DateTime.now_local().get_hour().to_string();
+				string minute = new DateTime.now_local().get_minute().to_string();
+				string second = new DateTime.now_local().get_second().to_string();
 			
-			while (hour.length < 2)
-				hour = "0" + hour;
-			while (minute.length < 2)
-				minute = "0" + minute;
-			while (second.length < 2)
-				second = "0" + second;
+				while (hour.length < 2)
+					hour = "0" + hour;
+				while (minute.length < 2)
+					minute = "0" + minute;
+				while (second.length < 2)
+					second = "0" + second;
 			
-			this.clock.label.set_text(hour + ":" + minute + ":" + second);
+				if (!(this.current_time[0] == hour && this.current_time[1] == minute && this.current_time[2] == second))
+				{
+					this.current_time = {hour, minute, second};
+					this.clock.label.set_text(hour + ":" + minute + ":" + second);
+				}
+			}
 		}
 	}
 }
