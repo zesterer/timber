@@ -4,28 +4,31 @@ I got bored one afternoon and started writing a desktop panel
 
 ### What is Timber?
 
-Timber is a Gtk 3 desktop panel. It draws inspiration from Wingpanel and Budgie-panel among others, yet will come to 
-include several niche features seen in neither. I don't really recommend you use this as your everyday panel, it's more 
-of a personal project.
+Timber is a Gtk 3 desktop panel. It draws inspiration from Wingpanel and Budgie-panel but aims eventually to be a fully-featured desktop panel in it's own right with a focus on design, performance and functionality. For now, Timber is a personal project that I decided to develop due to the lack of desktop-independent panels for modern Linux desktops. Wingpanel is good, but I've found it to be very dependent on Pantheon's components such as granite. xfce4-panel and mate-panel are functional, but are not graphically appealing and are rather tied to their respective desktop environments. There have been other more niche attempts at similar projects, but most are either discontinued or are crippled with graphical and functional bugs on most systems.
 
-### Compiling & Running
-#### (Easy as chips)
+### Building Timber
+
+Timber uses the Meson build system. It's not a commonly used build system, but it suits the needs of the Timber well. Most common distributions will have a version of Meson in their repositories. If you don't, or if your version is too old, get an updated copy here: http://mesonbuild.com/download.html. Sorry for any inconveniences.
 
 Clone the repository:
 
-`git clone git://www.github.com/zesterer/timber/`
+`git clone git://www.github.com/zesterer/timber && cd timber`
 
-Navigate to Timbers directory:
+Create a new build directory:
 
-`cd timber`
+`mkdir build && cd build`
+
+Configure Timber:
+
+`meson ..`
 
 Build Timber:
 
-`make build`
+`ninja-build`
 
-Run Timber:
+To run Timber, simply run:
 
-`make run`
+`./timber`
 
 ### Credits
 

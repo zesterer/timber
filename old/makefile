@@ -29,7 +29,8 @@ src/basepopover.vala \
 src/testpopover.vala \
 src/notificationarea.vala \
 
-VALA_FLAGS=-X -lm -X "-D WNCK_I_KNOW_THIS_IS_UNSTABLE" -X -fsanitize=address
+VALA_FLAGS=-X -lm -X "-D WNCK_I_KNOW_THIS_IS_UNSTABLE"
+# -X -fsanitize=address
 
 VALA_PACKAGES=--pkg gtk+-3.0 --pkg x11 --pkg libwnck-3.0
 #--pkg accountsservice

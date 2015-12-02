@@ -209,7 +209,7 @@ namespace Timber
 		{
 			bool redraw = false; //Should we redraw this method?
 			
-			//TODO - Sorry. There's gotta be a less performance-intensive way than this...
+			//TODO - Sorry. There's got to be a less performance-intensive way than this...
 			//Update regularly-ish
 			if (this.tick % 10 == 0) //Every 5th of a second
 				this.onViewportsChanged();
