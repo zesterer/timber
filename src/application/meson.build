@@ -15,33 +15,13 @@
 # You should have received a copy of the GNU General Public License along
 # with Timber. If not, see http://www.gnu.org/licenses/.
 
-#Define the project features
-project(
-'timber',
-['vala', 'c']
+#Add source files
+srcs = [srcs,
+files(
+'application.vala',
+'appsettings.vala'
 )
-
-#Initiate variables
-exec_name = 'timber'
-srcs = []
-deps = []
-
-#Add dependencies
-deps = [deps,
-dependency('glib-2.0'),
-dependency('gobject-2.0'),
-dependency('gtk+-3.0'),
-dependency('libwnck-3.0'),
-dependency('x11')
 ]
 
 #Add subdirectories
-subdir('src')
-
-#Create the executable
-executable(
-exec_name,
-sources : srcs,
-dependencies : deps,
-c_args : ['-D WNCK_I_KNOW_THIS_IS_UNSTABLE']
-)
+#subdir('application')

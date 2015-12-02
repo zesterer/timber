@@ -19,10 +19,19 @@
 
 namespace Timber
 {
-	int main(string[] args)
+	class Application : Gtk.Application
 	{
-		Application app = new Application();
+		private AppSettings app_settings;
 		
-		return app.run(args);
+		public Application()
+		{
+			GLib.Object(application_id : "org.zesterer.timber", flags : ApplicationFlags.FLAGS_NONE);
+		}
+		
+		protected override void activate()
+		{
+			Panel main_panel = new Panel(this, this.app_settings);
+			main_panel.set_active(true);
+		}
 	}
 }

@@ -19,10 +19,15 @@
 
 namespace Timber
 {
-	int main(string[] args)
+	struct AppSettings
 	{
-		Application app = new Application();
+		public string name;
+		public string version;
 		
-		return app.run(args);
+		public AppSettings()
+		{
+			this.name = "Timber";
+			this.version = "1.0.0";
+		}
 	}
 }
